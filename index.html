@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -107,3 +107,153 @@ Object.keys(audioMap).forEach(id => {
     </script>
 </body>
 </html>
+ -->
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Avdaga Hasic</title>
+    <script src="https://aframe.io/releases/1.4.1/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+        a-scene {
+            width: 100%;
+            height: 100vh;
+        }
+        #play-bosnian {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            padding: 10px;
+            background: #008000;
+            color: white;
+            border: none;
+            cursor: pointer;
+            z-index: 1000;
+            font-size: 16px;
+        }
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div id="loading-screen">Učitavanje...</div>
+    <button id="play-bosnian" onclick="playBosnian()">Sviraj Bosanski</button>
+    <audio id="audio-bosanski" src="https://raw.githubusercontent.com/saracen7mi/avdagahasic/main/avdagaHasic.mp3"></audio>
+    <audio id="audio-english" src="https://raw.githubusercontent.com/saracen7mi/avdagahasic/main/avdagaEngleski.mp3"></audio>
+    <audio id="audio-german" src="https://raw.githubusercontent.com/saracen7mi/avdagahasic/main/avdagaNjemacki.mp3"></audio>
+    <audio id="audio-italian" src="https://raw.githubusercontent.com/saracen7mi/avdagahasic/main/avdagItalijanski.mp3"></audio>
+    <audio id="audio-turkish" src="https://raw.githubusercontent.com/saracen7mi/avdagahasic/main/avdagaTurski.mp3"></audio>
+    <a-scene embedded arjs="sourceType: webcam; trackingMethod: best; debugUIEnabled: false;">
+        <a-assets timeout="30000">
+            <a-asset-item id="grb" src="https://cdn.jsdelivr.net/gh/saracen7mi/avdagahasic@main/grbOpstine.glb"></a-asset-item>
+            <a-asset-item id="zvijezda" src="https://cdn.jsdelivr.net/gh/saracen7mi/avdagahasic@main/zvijezdaislam.glb"></a-asset-item>
+            <img id="avdaga-img" src="https://cdn.jsdelivr.net/gh/saracen7mi/avdagahasic@main/avdagahasic.png">
+        </a-assets>
+        <a-sky color="#1A237E" material="shader: gradient; topColor: 26 35 126; bottomColor: 100 181 246"></a-sky>
+        <a-plane position="-0.5 0 -3" width="3" height="1.8" material="shader: flat; src: #avdaga-img;"></a-plane>
+        <a-entity gltf-model="#grb" position="-1.8 0.6 -3" scale="0.7 0.7 0.7" rotation="0 240 0" animation="property: rotation; to: 0 360 0; loop: true; dur: 5000"></a-entity>
+        <a-entity gltf-model="#zvijezda" position="1.2 0.6 -3" scale="0.7 0.7 0.7" rotation="0 240 0" animation="property: rotation; to: 0 360 0; loop: true; dur: 5000"></a-entity>
+        <a-entity id="eng-button" geometry="primitive: plane; height: 0.3; width: 0.9" material="color: red" position="-1.8 1.2 -3" rotation="0 0 0" text="value: ENG; color: white; align: center; width: 1.8;" audio-button="audio: audio-english"></a-entity>
+        <a-entity id="deu-button" geometry="primitive: plane; height: 0.3; width: 0.9" material="color: yellow" position="-0.9 1.2 -3" rotation="0 0 0" text="value: DEU; color: black; align: center; width: 1.8;" audio-button="audio: audio-german"></a-entity>
+        <a-entity id="ita-button" geometry="primitive: plane; height: 0.3; width: 0.9" material="color: blue" position="0 1.2 -3" rotation="0 0 0" text="value: ITA; color: white; align: center; width: 1.8;" audio-button="audio: audio-italian"></a-entity>
+        <a-entity id="tur-button" geometry="primitive: plane; height: 0.3; width: 0.9" material="color: brown" position="0.9 1.2 -3" rotation="0 0 0" text="value: TUR; color: white; align: center; width: 1.8;" audio-button="audio: audio-turkish"></a-entity>
+        <a-camera position="0 1 0" fov="70">
+            <a-cursor color="#FF0000" radius="0.03" position="0 0 -0.5"></a-cursor>
+        </a-camera>
+    </a-scene>
+    <script>
+        AFRAME.registerComponent('audio-button', {
+            schema: {
+                audio: { type: 'string' }
+            },
+            init: function () {
+                this.el.addEventListener('click', () => {
+                    const audioElement = document.getElementById(this.data.audio);
+                    if (audioElement) {
+                        stopAllAudio();
+                        audioElement.play().catch(e => console.error('Greška pri reprodukciji audija:', e));
+                    } else {
+                        console.error('Audio element ne postoji:', this.data.audio);
+                    }
+                });
+            }
+        });
+
+        const audioMap = {
+            'eng-button': document.getElementById('audio-english'),
+            'deu-button': document.getElementById('audio-german'),
+            'ita-button': document.getElementById('audio-italian'),
+            'tur-button': document.getElementById('audio-turkish'),
+        };
+
+        function stopAllAudio() {
+            Object.values(audioMap).forEach(audio => {
+                if (audio) {
+                    audio.pause();
+                    audio.currentTime = 0;
+                }
+            });
+            const bosnianAudio = document.getElementById('audio-bosanski');
+            if (bosnianAudio) {
+                bosnianAudio.pause();
+                bosnianAudio.currentTime = 0;
+            }
+        }
+
+        function playBosnian() {
+            const bosnianAudio = document.getElementById('audio-bosanski');
+            if (bosnianAudio) {
+                stopAllAudio();
+                bosnianAudio.play().catch(e => console.error('Greška pri reprodukciji bosanskog audija:', e));
+            }
+        }
+
+        window.addEventListener('load', () => {
+            console.log('Stranica učitana. Provjeravam resurse...');
+            const bosnianAudio = document.getElementById('audio-bosanski');
+            document.body.addEventListener('click', () => {
+                if (bosnianAudio && bosnianAudio.paused) {
+                    playBosnian();
+                }
+            }, { once: true });
+
+            const assets = document.querySelector('a-assets');
+            if (assets) {
+                assets.addEventListener('loaded', () => {
+                    document.getElementById('loading-screen').style.display = 'none';
+                });
+                assets.addEventListener('error', (e) => {
+                    console.error('Greška pri učitavanju resursa:', e.detail);
+                    document.getElementById('loading-screen').innerText = 'Greška pri učitavanju resursa! Provjerite konzolu.';
+                });
+            }
+        });
+    </script>
+</body>
+</html>
+
+ 
