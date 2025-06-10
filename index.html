@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=0">
-    <title>Avdaga Hasic - Kladanj</title>
+    <title>Avdaga Hasic</title>
     <script src="https://aframe.io/releases/1.4.1/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     <style>
@@ -17,29 +17,27 @@
         }
     </style>
 </head>
-  <button onclick="playBosnian()"></button>
-
 <body>
-  
-    <audio id="audio-english" src="https://cdn.glitch.global/2e66297c-4b2c-410b-8bd4-9c4f9e19b0e3/avdagaEngleski.mp3?v=1743330875629"></audio>
-    <audio id="audio-german" src="https://cdn.glitch.global/2e66297c-4b2c-410b-8bd4-9c4f9e19b0e3/avdagaNjemacki.mp3?v=1743330911933"></audio>
-    <audio id="audio-italian" src="https://cdn.glitch.global/2e66297c-4b2c-410b-8bd4-9c4f9e19b0e3/avdagItalijanski.mp3?v=1743330935820"></audio>
-    <audio id="audio-turkish" src="https://cdn.glitch.global/2e66297c-4b2c-410b-8bd4-9c4f9e19b0e3/avdagaTurski.mp3?v=1743331497823"></audio>
-    <audio id="audio-bosanski" src="https://cdn.glitch.global/2e66297c-4b2c-410b-8bd4-9c4f9e19b0e3/avdagaHasic.mp3?v=1743330898851"></audio>
+    <button onclick="playBosnian()"></button>
+    <audio id="audio-english" src="https://raw.githubusercontent.com/saracen7mi/avdagahasic/main/avdagaEngleski.mp3"></audio>
+    <audio id="audio-german" src="https://raw.githubusercontent.com/saracen7mi/avdagahasic/main/avdagaNjemacki.mp3"></audio>
+    <audio id="audio-italian" src="https://raw.githubusercontent.com/saracen7mi/avdagahasic/main/avdagItalijanski.mp3"></audio>
+    <audio id="audio-turkish" src="https://raw.githubusercontent.com/saracen7mi/avdagahasic/main/avdagaTurski.mp3></audio>
+    <audio id="audio-bosanski" src="https://raw.githubusercontent.com/saracen7mi/avdagahasic/main/avdagaHasic.mp3></audio>
     <a-scene embedded arjs>
         <!-- Pomjerena slika udesno -->
         <a-plane position="-0.8 0 -5" width="5" height="3" 
-            material="shader: flat; src: url(https://cdn.glitch.global/2e66297c-4b2c-410b-8bd4-9c4f9e19b0e3/Screenshot%202025-03-29%20at%2020.47.07.png?v=1743281467251);"></a-plane>
+            material="shader: flat; src: url(https://cdn.jsdelivr.net/gh/saracen7mi/avdagahasic@main/avdagahasic.png);"></a-plane>
         
         <a-camera position="0 0 0" fov="70">
             <a-cursor color="#FF0000" radius="0.05"></a-cursor>
         </a-camera>
 
-        <a-entity gltf-model="https://cdn.glitch.global/4af910c6-eda3-46ab-9d21-038ca536d652/mjeseciZvjezda.glb?v=1743277332099" 
+        <a-entity gltf-model="https://cdn.jsdelivr.net/gh/saracen7mi/avdagahasic@main/grbOpstine.glb" 
                   position="-3 1 -5" scale="1.2 1.2 1.2" rotation="0 240 0" 
                   animation="property: rotation; to: 0 360 0; loop: true; dur: 5000"></a-entity>
 
-        <a-entity gltf-model="https://cdn.glitch.global/4af910c6-eda3-46ab-9d21-038ca536d652/grbopstine3d.glb?v=1743276265780" 
+        <a-entity gltf-model="https://cdn.jsdelivr.net/gh/saracen7mi/avdagahasic@main/zvijezdaislam.glb" 
                   position="2 1 -5" scale="1.2 1.2 1.2" rotation="0 240 0" 
                   animation="property: rotation; to: 0 360 0; loop: true; dur: 5000"></a-entity>
 
@@ -109,5 +107,3 @@ Object.keys(audioMap).forEach(id => {
     </script>
 </body>
 </html>
-
-
