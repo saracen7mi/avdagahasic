@@ -1,8 +1,10 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Avdaga Hasic</title>
     <script src="https://aframe.io/releases/1.4.1/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
@@ -18,17 +20,18 @@
     </style>
 </head>
 <body>
-    <button onclick="playBosnian()"></button>
-    <audio id="audio-english" src="https://raw.githubusercontent.com/saracen7mi/avdagahasic/main/avdagaEngleski.mp3"></audio>
-    <audio id="audio-german" src="https://raw.githubusercontent.com/saracen7mi/avdagahasic/main/avdagaNjemacki.mp3"></audio>
-    <audio id="audio-italian" src="https://raw.githubusercontent.com/saracen7mi/avdagahasic/main/avdagItalijanski.mp3"></audio>
-    <audio id="audio-turkish" src="https://raw.githubusercontent.com/saracen7mi/avdagahasic/main/avdagaTurski.mp3></audio>
-    <audio id="audio-bosanski" src="https://raw.githubusercontent.com/saracen7mi/avdagahasic/main/avdagaHasic.mp3></audio>
+    <!-- AUDIO elementi -->
+    <audio id="audio-bosanski" src="https://cdn.jsdelivr.net/gh/saracen7mi/avdagahasic@main/avdagaHasic.mp3"></audio>
+    <audio id="audio-english" src="https://cdn.jsdelivr.net/gh/saracen7mi/avdagahasic@main/avdagaEngleski.mp3"></audio>
+    <audio id="audio-german" src="https://cdn.jsdelivr.net/gh/saracen7mi/avdagahasic@main/avdagaNjemacki.mp3"></audio>
+    <audio id="audio-italian" src="https://cdn.jsdelivr.net/gh/saracen7mi/avdagahasic@main/avdagItalijanski.mp3"></audio>
+    <audio id="audio-turkish" src="https://cdn.jsdelivr.net/gh/saracen7mi/avdagahasic@main/avdagaTurski.mp3"></audio>
+
+    <!-- A-FRAME SCENA -->
     <a-scene embedded arjs>
-        <!-- Pomjerena slika udesno -->
         <a-plane position="-0.8 0 -5" width="5" height="3" 
             material="shader: flat; src: url(https://cdn.jsdelivr.net/gh/saracen7mi/avdagahasic@main/avdagahasic.png);"></a-plane>
-        
+
         <a-camera position="0 0 0" fov="70">
             <a-cursor color="#FF0000" radius="0.05"></a-cursor>
         </a-camera>
@@ -51,66 +54,47 @@
                   geometry="primitive: plane; height: 0.5; width: 1.5" material="color: brown"></a-entity>
     </a-scene>
 
+    <!-- SCRIPT -->
     <script>
         const audioMap = {
             'eng-button': document.getElementById('audio-english'),
             'deu-button': document.getElementById('audio-german'),
             'ita-button': document.getElementById('audio-italian'),
             'tur-button': document.getElementById('audio-turkish'),
-          
         };
-      
-    window.addEventListener('load', () => {
-    const bosnianAudio = document.getElementById('audio-bosanski');
 
-    if (bosnianAudio) {
-        bosnianAudio.play().catch(error => {
-            console.log("Automatska reprodukcija blokirana: ", error);
+        function stopAllAudio() {
+            Object.values(audioMap).forEach(audio => {
+                audio.pause();
+                audio.currentTime = 0;
+            });
+            const bosnian = document.getElementById('audio-bosanski');
+            if (bosnian) {
+                bosnian.pause();
+                bosnian.currentTime = 0;
+            }
+        }
+
+        function playAudio(audioElement) {
+            stopAllAudio();
+            audioElement.play();
+        }
+
+        Object.keys(audioMap).forEach(id => {
+            document.getElementById(id).addEventListener('click', () => playAudio(audioMap[id]));
         });
-    }
-});
-      
 
-function stopAllAudio() {
-    Object.values(audioMap).forEach(audio => {
-        audio.pause();
-        audio.currentTime = 0;
-    });
-
-    // Također zaustavi bosanski audio kada se klikne na bilo koji jezik
-    const bosnianAudio = document.getElementById('audio-bosanski');
-    if (bosnianAudio) {
-        bosnianAudio.pause();
-        bosnianAudio.currentTime = 0;
-    }
-}
-document.body.addEventListener('click', () => {
-    const bosnianAudio = document.getElementById('audio-bosanski');
-    bosnianAudio.play();
-}, { once: true });
-function playBosnian() {
-    const bosnianAudio = document.getElementById('audio-bosanski');
-    bosnianAudio.play();
-}
-
-      
-      
-function playAudio(audioElement) {
-    stopAllAudio();
-    audioElement.play();
-}
-
-Object.keys(audioMap).forEach(id => {
-    document.getElementById(id).addEventListener('click', () => playAudio(audioMap[id]));
-});
-
+        window.addEventListener('load', () => {
+            const bosnianAudio = document.getElementById('audio-bosanski');
+            const unlock = () => {
+                playAudio(bosnianAudio);
+                document.body.removeEventListener('click', unlock);
+            };
+            document.body.addEventListener('click', unlock);
+        });
     </script>
 </body>
 </html>
-
-
-
-
 
 
 
